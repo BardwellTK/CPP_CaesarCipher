@@ -4,20 +4,28 @@
 #include <sstream>
 using namespace std;
 
-string* plainText(string* input)
+void menu()
 {
+    //Print menu
+    cout << "Caesar Cipher" << endl;
+    cout << "=============" << endl;
+}
+
+string* getInput()
+{
+    string* input = new string();
     //Loop until input
     do{
         //Print menu
-        menu()
+        menu();
         cout << "Enter plain text: ";
         //Get input : use getline, to get spaces inbetween
         getline(cin,*input);
-    } while (*input.empty());
+    } while (input->empty());
     return input;
 }
 
-unsigned short int* getShift(unsigned short int* shift)
+unsigned short int* getShift()
 {
     //Technically the CaesarCipher could take a negative shift value
     //But this is unnecessary
@@ -25,9 +33,10 @@ unsigned short int* getShift(unsigned short int* shift)
     //Loop until shift
     string input;
     int temp = 0;
+    unsigned short int* shift = new unsigned short int();
     do{
         //Print menu
-        menu()
+        menu();
         cout << "Enter shift (x > 0 and x % 26 != 0): ";
         //Get input : use getline, to get spaces inbetween
         cin >> input;
@@ -52,44 +61,51 @@ unsigned short int* getShift(unsigned short int* shift)
     return shift;
 }
 
-void menu()
+string* caesarCipher(string* input,const unsigned short int* shift)
 {
-    //Print menu
-    cout << "\n\n" << endl;
-    cout << "Caesar Cipher" << endl;
-    cout << "=============" << endl;
-}
-
-string* caesarCipher(string* input)
-{
+    string* output = new string();
     //For each character in input
-    //Add shift to ascii value
-    //WIP
-    return input;
+    for(char& c: *input)
+    {
+        if (c != '\0')
+        {
+            if (c >= 'a' && c <= 'z')
+            {
+                c += *shift;
+                if (c > 'z'){ c += 'a' - 'z' - 1; }
+            }
+            else if (c >= 'A' && c <= 'Z')
+            {
+                c += *shift;
+                if (c > 'Z'){ c += 'A' - 'Z' - 1; }
+            }
+        }
+        *output += c;
+    }
+    return output;
 }
 
 int main(int argc, char** argv) {
     //Variable declaration
-    string* input = new string();
+    string* input;
     string* output = new string();
-    unsigned short int* shift = new int();
-    *shift = 0;
+    unsigned short int* shift;
 
     //INPUT
     //| - Get plain text
-    getInput(input);
+    input = getInput();
     //| - Get shift
-    getShift(shift);
+    shift = getShift();
 
     cout << "INPUT: " << *input << endl;
     cout << "SHIFT: " << *shift << endl;
     //Calculate output
-    *output = *input;
-    caesarCipher(output);
+    output = caesarCipher(input, shift);
     //Output
+    cout << "OUTPUT: " << *output << endl;
 
 
     //Trash cleanup
-    delete input,shift;
+    delete input,shift,output;
     return 0;
 }
