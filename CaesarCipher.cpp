@@ -85,10 +85,37 @@ string* caesarCipher(string* input,const unsigned short int* shift)
     return output;
 }
 
+string* decipher(string* input, const unsigned short int* shift)
+{
+    //setup output
+    string* output = new string();
+
+    for(char& c: *input)
+    {
+        if (c != '\0')
+        {
+            if (c >= 'a' && c <= 'z')
+            {
+                c -= *shift;
+                if (c < 'a'){ c += 'z' - 'a' + 1; }
+            }
+            else if (c >= 'A' && c <= 'Z')
+            {
+                c -= *shift;
+                if (c < 'A'){ c += 'Z' - 'A' + 1; }
+            }
+        }
+        *output += c;
+    }
+    return output;
+
+}
+
 int main(int argc, char** argv) {
     //Variable declaration
     string* input;
     string* output = new string();
+    string* undo = new string();
     unsigned short int* shift;
 
     //INPUT
@@ -103,9 +130,11 @@ int main(int argc, char** argv) {
     output = caesarCipher(input, shift);
     //Output
     cout << "OUTPUT: " << *output << endl;
-
+    //undo
+    undo = decipher(output,shift);
+    cout << "DECIPHER: " << *undo << endl;
 
     //Trash cleanup
-    delete input,shift,output;
+    delete input,shift,output,undo;
     return 0;
 }
